@@ -459,13 +459,11 @@
   }
   block(above: 1em, below: 0.65em)[
       #pad[
-          #if location != "" [
-              #justified-header(title-content, location)
+          #justified-header(title-content, location)
+          #if description != "" or date != "" [
+              #secondary-justified-header(description, date)
           ]
-      #if description != "" or date != "" [
-        #secondary-justified-header(description, date)
       ]
-    ]
   ]
 }
 
