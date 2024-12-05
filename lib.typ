@@ -131,6 +131,14 @@
   ]
 }
 
+#let git-link(url, alt, icon:fa-icon("git-alt")) = {
+  set box(height: 11pt)
+  
+  align(right + horizon)[
+    #icon #link(url, alt)
+  ]
+}
+
 /// Right section for the justified headers
 /// - body (content): The body of the right header
 #let secondary-right-header(body) = {
