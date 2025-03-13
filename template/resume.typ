@@ -1,4 +1,4 @@
-#import "@preview/modern-cv:0.7.0": *
+#import "@preview/modern-cv:0.8.0": *
 
 #show: resume.with(
   author: (
@@ -20,10 +20,12 @@
       "Developer",
     ),
   ),
+  profile-picture: none,
   date: datetime.today().display(),
   language: "en",
   colored-headers: true,
   show-footer: false,
+  paper-size: "us-letter",
 )
 
 = Experience

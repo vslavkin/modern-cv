@@ -18,6 +18,9 @@
 #let gitlab-icon = box(
   fa-icon("gitlab", fill: color-darknight),
 )
+#let bitbucket-icon = box(
+  fa-icon("bitbucket", fill: color-darknight),
+)
 #let twitter-icon = box(
   fa-icon("twitter", fill: color-darknight),
 )
@@ -34,6 +37,23 @@
 #let website-icon = box(fa-icon("globe", fill: color-darknight))
 
 /// Helpers
+
+// Common helper functions
+#let __format_author_name(author, language) = {
+  if language == "zh" or language == "ja" {
+    str(author.firstname) + str(author.lastname)
+  } else {
+    str(author.firstname) + " " + str(author.lastname)
+  }
+}
+
+#let __apply_smallcaps(content, use-smallcaps) = {
+  if use-smallcaps {
+    smallcaps(content)
+  } else {
+    content
+  }
+}
 
 // layout utility
 #let __justify_align(left_body, right_body) = {
@@ -67,23 +87,21 @@
   ]
 }
 
-#let __coverletter_footer(author, language, date, lang_data) = {
+#let __coverletter_footer(author, language, date, lang_data, use-smallcaps: true) = {
   set text(
     fill: gray,
     size: 8pt,
   )
   __justify_align_3[
-    #smallcaps[#date]
+    #__apply_smallcaps(date, use-smallcaps)
   ][
-    #smallcaps[
-      #if language == "zh" or language == "ja" [
-        #author.firstname#author.lastname
-      ] else [
-        #author.firstname#sym.space#author.lastname
-      ]
-      #sym.dot.c
-      #linguify("cover-letter", from: lang_data)
-    ]
+    #__apply_smallcaps(
+      {
+        let name = __format_author_name(author, language)
+        name + " · " + linguify("cover-letter", from: lang_data)
+      },
+      use-smallcaps
+    )
   ][
     #context {
       counter(page).display()
@@ -91,23 +109,21 @@
   ]
 }
 
-#let __resume_footer(author, language, lang_data, date) = {
+#let __resume_footer(author, language, lang_data, date, use-smallcaps: true) = {
   set text(
     fill: gray,
     size: 8pt,
   )
   __justify_align_3[
-    #smallcaps[#date]
+    #__apply_smallcaps(date, use-smallcaps)
   ][
-    #smallcaps[
-      #if language == "zh" or language == "ja" [
-        #author.firstname#author.lastname
-      ] else [
-        #author.firstname#sym.space#author.lastname
-      ]
-      #sym.dot.c
-      #linguify("resume", from: lang_data)
-    ]
+    #__apply_smallcaps(
+      {
+        let name = __format_author_name(author, language)
+        name + " · " + linguify("resume", from: lang_data)
+      },
+      use-smallcaps
+    )
   ][
     #context {
       counter(page).display()
@@ -195,20 +211,26 @@
 /// The original template: https://github.com/posquit0/Awesome-CV
 ///
 /// - author (content): Structure that takes in all the author's information
+/// - profile-picture (image): The profile picture of the author. This will be cropped to a circle and should be square in nature.
 /// - date (string): The date the resume was created
 /// - accent-color (color): The accent color of the resume
 /// - colored-headers (boolean): Whether the headers should be colored or not
 /// - language (string): The language of the resume, defaults to "en". See lang.toml for available languages
+/// - use-smallcaps (boolean): Whether to use small caps formatting throughout the template
 /// - body (content): The body of the resume
 /// -> none
 #let resume(
   author: (:),
+  profile-picture: image,
   date: datetime.today().display("[month repr:long] [day], [year]"),
   accent-color: default-accent-color,
   colored-headers: true,
   show-footer: true,
   language: "en",
   font: ("Source Sans Pro", "Source Sans 3"),
+  header-font: ("Roboto"),
+  paper-size: "a4",
+  use-smallcaps: true,
   body,
 ) = {
   if type(accent-color) == "string" {
@@ -234,13 +256,14 @@
   )
   
   set page(
-    paper: "a4",
+    paper: paper-size,
     margin: (left: 15mm, right: 15mm, top: 10mm, bottom: 10mm),
     footer: if show-footer [#__resume_footer(
         author,
         language,
         lang_data,
         date,
+        use-smallcaps: use-smallcaps,
       )] else [],
     footer-descent: 0pt,
   )
@@ -268,7 +291,7 @@
     } else {
       color-darkgray
     }
-    #text[#strong[#text(color)[#it.body.text]]]
+    #text[#strong[#text(color)[#it.body]]]
     #box(width: 1fr, line(length: 100%))
   ]
   
@@ -287,7 +310,7 @@
       size: 10pt,
       weight: "regular",
     )
-    smallcaps[#it.body]
+    __apply_smallcaps(it.body, use-smallcaps)
   }
   
   let name = {
@@ -297,7 +320,7 @@
           #set text(
             size: 32pt,
             style: "normal",
-            font: ("Roboto"),
+            font: header-font,
           )
           #if language == "zh" or language == "ja" [
             #text(
@@ -320,11 +343,12 @@
       weight: "regular",
     )
     align(center)[
-      #smallcaps[
-        #author.positions.join(
+      #__apply_smallcaps(
+        author.positions.join(
           text[#"  "#sym.dot.c#"  "],
-        )
-      ]
+        ),
+        use-smallcaps
+      )
     ]
   }
   
@@ -382,6 +406,11 @@
             #gitlab-icon
             #box[#link("https://gitlab.com/" + author.gitlab)[#author.gitlab]]
           ]
+          #if ("bitbucket" in author) [
+            #separator
+            #bitbucket-icon
+            #box[#link("https://bitbucket.org/" + author.bitbucket)[#author.bitbucket]]
+          ]
           #if ("linkedin" in author) [
             #separator
             #linkedin-icon
@@ -415,11 +444,37 @@
     ]
   }
   
-  name
-  positions
-  address
-  contacts
+  if profile-picture != none {
+    grid(
+      columns: (100% - 4cm, 4cm),
+      rows: (100pt),
+      gutter: 10pt,
+      [
+        #name
+        #positions
+        #address
+        #contacts
+      ],
+      align(left + horizon)[
+        #block(
+          clip: true,
+          stroke: 0pt,
+          radius: 2cm,
+          width: 4cm,
+          height: 4cm,
+          profile-picture,
+        )
+      ],
+    )
+  } else {
+    name
+    positions
+    address
+    contacts
+  }
+
   body
+
 }
 
 /// The base item for resume entries.
@@ -575,6 +630,7 @@
 /// - font (array): The font families of the cover letter
 /// - show-footer (boolean): Whether to show the footer or not
 /// - closing (content): The closing of the cover letter. This defaults to "Attached Curriculum Vitae". You can set this to `none` to show the default closing or remove it completely.
+/// - use-smallcaps (boolean): Whether to use small caps formatting throughout the template
 /// - body (content): The body of the cover letter
 #let coverletter(
   author: (:),
@@ -585,6 +641,8 @@
   font: ("Source Sans Pro", "Source Sans 3"),
   show-footer: true,
   closing: none,
+  paper-size: "a4",
+  use-smallcaps: true,
   body,
 ) = {
   if type(accent-color) == "string" {
@@ -615,13 +673,14 @@
   )
   
   set page(
-    paper: "a4",
+    paper: paper-size,
     margin: (left: 15mm, right: 15mm, top: 10mm, bottom: 10mm),
     footer: if show-footer [#__coverletter_footer(
         author,
         language,
         date,
         lang_data,
+        use-smallcaps: use-smallcaps,
       )] else [],
     footer-descent: 0pt,
   )
@@ -648,7 +707,7 @@
     )
     
     #align(left)[
-      #text[#strong[#text(accent-color)[#it.body.text]]]
+      #text[#strong[#text(accent-color)[#it.body]]]
       #box(width: 1fr, line(length: 100%))
     ]
   ]
@@ -684,11 +743,12 @@
       weight: "regular",
     )
     align(right)[
-      #smallcaps[
-        #author.positions.join(
+      #__apply_smallcaps(
+        author.positions.join(
           text[#"  "#sym.dot.c#"  "],
-        )
-      ]
+        ),
+        use-smallcaps
+      )
     ]
   }
   
@@ -787,7 +847,7 @@
         #text(weight: "light")[#linguify(
             "sincerely",
             from: lang_data,
-          )#sym.comma] \
+          )#if language != "de" [#sym.comma]] \
         #text(weight: "bold")[#author.firstname #author.lastname] \ \
       ]
     ]
@@ -807,6 +867,7 @@
 #let hiring-entity-info(
   entity-info: (:),
   date: datetime.today().display("[month repr:long] [day], [year]"),
+  use-smallcaps: true,
 ) = {
   set par(leading: 1em)
   pad(top: 1.5em, bottom: 1.5em)[
@@ -818,7 +879,7 @@
     
     #pad(top: 0.65em, bottom: 0.65em)[
       #text(weight: "regular", fill: color-gray, size: 9pt)[
-        #smallcaps[#entity-info.name] \
+        #__apply_smallcaps(entity-info.name, use-smallcaps) \
         #entity-info.street-address \
         #entity-info.city \
       ]
@@ -835,7 +896,7 @@
   
   // TODO: Make this adaptable to content
   underline(evade: false, stroke: 0.5pt, offset: 0.3em)[
-    #text(weight: "bold", size: 12pt)[Job Application for #job-position]
+    #text(weight: "bold", size: 12pt)[#linguify("letter-position-pretext", from: lang_data) #job-position]
   ]
   pad(top: 1em, bottom: 1em)[
     #text(weight: "light", fill: color-gray)[
