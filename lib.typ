@@ -475,6 +475,35 @@
   ]
 }
 
+#let resume-entry-oneline(
+  title: none,
+  location: "",
+  date: "",
+  description: "",
+  title-link: none,
+  accent-color: default-accent-color,
+  location-color: default-location-color,
+) = {
+  let title-content
+  if type(title-link) == "string" {
+    title-content = link(title-link)[#title]
+  } else {
+    title-content = title
+  }
+  block(above: 1em, below: 0.65em)[
+      #pad[
+          // #justified-header(title-content, location)
+          // #if description != "" or date != "" [
+          //     #secondary-justified-header(description, date)
+        // ]
+        #title-content
+        #description
+        #location
+        #date
+      ]
+  ]
+}
+
 /// Show cumulative GPA.
 /// *Example:*
 /// #example(`resume.resume-gpa("3.5", "4.0")`)
