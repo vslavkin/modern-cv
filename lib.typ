@@ -1,5 +1,5 @@
 #import "@preview/fontawesome:0.5.0": *
-#import "@preview/linguify:0.4.1": *
+#import "@preview/linguify:0.4.2": *
 
 // const color
 #let color-darknight = rgb("#131A28")
@@ -233,12 +233,12 @@
   use-smallcaps: true,
   body,
 ) = {
-  if type(accent-color) == "string" {
+  if type(accent-color) == str {
     accent-color = rgb(accent-color)
   }
   
   let lang_data = toml("lang.toml")
-
+  
   show: body => context {
     set document(
       author: author.firstname + " " + author.lastname,
@@ -246,7 +246,7 @@
     )
     body
   }
-
+  
   set text(
     font: font,
     lang: language,
@@ -472,9 +472,8 @@
     address
     contacts
   }
-
+  
   body
-
 }
 
 /// The base item for resume entries.
@@ -515,7 +514,7 @@
   location-color: default-location-color,
 ) = {
   let title-content
-  if type(title-link) == "string" {
+  if type(title-link) == str {
     title-content = link(title-link)[#title]
   } else {
     title-content = title
@@ -645,7 +644,7 @@
   use-smallcaps: true,
   body,
 ) = {
-  if type(accent-color) == "string" {
+  if type(accent-color) == str {
     accent-color = rgb(accent-color)
   }
   
@@ -655,15 +654,19 @@
   if closing == none {
     closing = default-closing(lang_data)
   }
-
+  
   show: body => context {
     set document(
       author: author.firstname + " " + author.lastname,
-      title: lflib._linguify("cover-letter", lang: language, from: lang_data).ok,
+      title: lflib._linguify(
+        "cover-letter",
+        lang: language,
+        from: lang_data,
+      ).ok,
     )
     body
   }
-
+  
   set text(
     font: font,
     lang: language,
@@ -768,7 +771,52 @@
   let contacts = {
     set box(height: 9pt)
     
+<<<<<<< HEAD
     let separator = [#box(sym.bar.v)]
+=======
+    let separator = [ #box(sym.bar.v) ]
+    let author_list = ()
+    
+    if ("phone" in author) {
+      author_list.push[
+        #phone-icon
+        #box[#text(author.phone)]
+      ]
+    }
+    if ("email" in author) {
+      author_list.push[
+        #email-icon
+        #box[#link("mailto:" + author.email)[#author.email]]
+      ]
+    }
+    if ("github" in author) {
+      author_list.push[
+        #github-icon
+        #box[#link("https://github.com/" + author.github)[#author.github]]
+      ]
+    }
+    if ("linkedin" in author) {
+      author_list.push[
+        #linkedin-icon
+        #box[
+          #link("https://www.linkedin.com/in/" + author.linkedin)[#author.firstname #author.lastname]
+        ]
+      ]
+    }
+    if ("orcid" in author) {
+      author_list.push[
+        #orcid-icon
+        #box[#link("https://orcid.org/" + author.orcid)[#author.orcid]]
+      ]
+    }
+    if ("website" in author) {
+      author_list.push[
+        #website-icon
+        #box[#link(author.website)[#author.website]]
+      ]
+    }
+    
+>>>>>>> upstream/typst-0.13
     
     align(right)[
       #set text(
@@ -896,7 +944,10 @@
   
   // TODO: Make this adaptable to content
   underline(evade: false, stroke: 0.5pt, offset: 0.3em)[
-    #text(weight: "bold", size: 12pt)[#linguify("letter-position-pretext", from: lang_data) #job-position]
+    #text(weight: "bold", size: 12pt)[#linguify(
+        "letter-position-pretext",
+        from: lang_data,
+      ) #job-position]
   ]
   pad(top: 1em, bottom: 1em)[
     #text(weight: "light", fill: color-gray)[
