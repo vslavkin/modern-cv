@@ -447,34 +447,34 @@
     ]
   }
   
-  if profile-picture != none {
-    grid(
-      columns: (100% - 4cm, 4cm),
-      rows: (100pt),
-      gutter: 10pt,
-      [
-        #name
-        #positions
-        #address
-        #contacts
-      ],
-      align(left + horizon)[
-        #block(
-          clip: true,
-          stroke: 0pt,
-          radius: 2cm,
-          width: 4cm,
-          height: 4cm,
-          profile-picture,
-        )
-      ],
-    )
-  } else {
+  // if profile-picture != none {
+  //   grid(
+  //     columns: (100% - 4cm, 4cm),
+  //     rows: (100pt),
+  //     gutter: 10pt,
+  //     [
+  //       #name
+  //       #positions
+  //       #address
+  //       #contacts
+  //     ],
+  //     align(left + horizon)[
+  //       #block(
+  //         clip: true,
+  //         stroke: 0pt,
+  //         radius: 2cm,
+  //         width: 4cm,
+  //         height: 4cm,
+  //         profile-picture,
+  //       )
+  //     ],
+  //   )
+  // } else {
     name
     positions
     address
     contacts
-  }
+  // }
   
   body
 }
