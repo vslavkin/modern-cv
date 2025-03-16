@@ -54,6 +54,9 @@
     content
   }
 }
+#let __apply_smallcaps(content, use-smallcaps) = {
+  content
+}
 
 // layout utility
 #let __justify_align(left_body, right_body) = {
