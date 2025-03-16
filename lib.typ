@@ -830,7 +830,6 @@
       ]
     }
     
->>>>>>> upstream/typst-0.13
     
     align(right)[
       #set text(
