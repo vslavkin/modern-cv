@@ -151,9 +151,10 @@
 }
 
 #let git-link(url, alt, icon:fa-icon("git-alt")) = {
-  set box(height: 11pt)
+  // set box(height: 11pt)
   
-  align(right + horizon)[
+  // align(right + horizon)
+  [
     #icon #link(url, alt)
   ]
 }
@@ -171,10 +172,10 @@
 /// Right section of a tertiaty headers.
 /// - body (content): The body of the right header
 #let tertiary-right-header(body) = {
-  set text(
-    weight: "light",
-    size: 9pt,
-  )
+  // set text(
+  //   weight: "light",
+  //   size: 9pt,
+  // )
   body
 }
 
@@ -284,7 +285,7 @@
   
   show heading.where(level: 1): it => [
     #set text(
-      size: 16pt,
+      size: 13pt,
       weight: "regular",
     )
     #set align(left)
@@ -301,7 +302,7 @@
   show heading.where(level: 2): it => {
     set text(
       color-darkgray,
-      size: 12pt,
+      size: 11pt,
       style: "normal",
       weight: "bold",
     )
@@ -548,16 +549,29 @@
     title-content = title
   }
   block(above: 1em, below: 0.65em)[
-      #pad[
-          // #justified-header(title-content, location)
-          // #if description != "" or date != "" [
-          //     #secondary-justified-header(description, date)
-        // ]
-        #title-content
-        #description
-        #location
-        #date
+    #pad[
+      // #justified-header(title-content, location)
+      // #if description != "" or date != "" [
+      //     #secondary-justified-header(description, date)
+      // ]
+      // #title-content
+      // #description
+      // #location
+      // #date
+      #__justify_align[
+        == #title-content
+      ][
+        #set text(
+          size: 11pt,
+          weight: "medium",
+        )
+        #if location!="" and date!="" [
+          #location. #date
+        ] else [
+          #location #date
+        ]
       ]
+    ]
   ]
 }
 
