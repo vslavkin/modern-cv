@@ -788,9 +788,6 @@
   let contacts = {
     set box(height: 9pt)
     
-<<<<<<< HEAD
-    let separator = [#box(sym.bar.v)]
-=======
     let separator = [ #box(sym.bar.v) ]
     let author_list = ()
     
