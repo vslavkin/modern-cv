@@ -543,7 +543,7 @@
   location-color: default-location-color,
 ) = {
   let title-content
-  if type(title-link) == "string" {
+  if type(title-link) == str {
     title-content = link(title-link)[#title]
   } else {
     title-content = title
