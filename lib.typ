@@ -482,15 +482,15 @@
   set text(
     size: 10pt,
     style: "normal",
-    weight: "light",
+    weight: "regular",
     fill: color-darknight,
   )
   set block(
     above: 0.75em,
-    below: 1.25em,
+    below: 1em,
   )
   set par(leading: 0.65em)
-  block(above: 0.5em)[
+  block(above: 0.75em)[
     #body
   ]
 }
