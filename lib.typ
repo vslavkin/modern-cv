@@ -299,7 +299,7 @@
       color-darkgray,
       size: 11pt,
       style: "normal",
-      weight: "bold",
+      weight: "semibold",
     )
     it.body
   }
