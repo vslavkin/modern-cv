@@ -290,7 +290,8 @@
       color-darkgray
     }
     #text[#strong[#text(color)[#it.body]]]
-    #box(width: 1fr, line(length: 100%))
+    #h(0.5em)
+    #box(width: 1fr, line(length: 100%, stroke: 0.5pt))
   ]
   
   show heading.where(level: 2): it => {
