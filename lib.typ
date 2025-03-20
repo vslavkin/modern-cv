@@ -543,7 +543,7 @@
   } else {
     title-content = title
   }
-  block(above: 1em, below: 0.65em)[
+  block(above: 0.75em, below: 0.75em)[
     #pad[
       // #justified-header(title-content, location)
       // #if description != "" or date != "" [
