@@ -284,15 +284,21 @@
       weight: "regular",
     )
     #set align(left)
-    #set block(above: 1em)
+    #set block(above: 0.25em, below: 0.75em)
     #let color = if colored-headers {
       accent-color
     } else {
       color-darkgray
     }
-    #text[#strong[#text(color)[#it.body]]]
     #h(0.5em)
-    #box(width: 1fr, line(length: 100%, stroke: 0.5pt))
+    // #text[#strong[#text(color)[#it.body]]]
+    #grid(
+      columns: (auto, 1fr),
+      align: horizon,
+      column-gutter: 5pt,
+      text[#strong[#text(color)[#it.body]]],
+      line(length: 100%, stroke: 0.5pt))
+    #v(0.1em)
   ]
   
   show heading.where(level: 2): it => {
