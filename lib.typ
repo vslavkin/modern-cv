@@ -35,6 +35,7 @@
 #let birth-icon = box(fa-icon("cake", fill: color-darknight))
 #let homepage-icon = box(fa-icon("home", fill: color-darknight))
 #let website-icon = box(fa-icon("globe", fill: color-darknight))
+#let cv-icon = box(fa-icon("file", fill: color-darknight))
 
 /// Helpers
 
@@ -437,6 +438,11 @@
             #separator
             #website-icon
             #box[#link(author.website)[#author.website]]
+          ]
+          #if ("cv" in author) [
+            #separator
+            #cv-icon
+            #box[#author.cv]
           ]
         ]
       ]
